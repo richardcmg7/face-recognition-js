@@ -7,8 +7,7 @@ Promise.all([
 ]).then(start)
 
 function start() {
-    document.body.append('Models Loaded')
-    
+    navigator.getUserMedia = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
     navigator.getUserMedia(
         { video:{} },
         stream => video.srcObject = stream,
@@ -16,7 +15,6 @@ function start() {
     )
     
     //video.src = '../videos/speech.mp4'
-    console.log('video added')
     recognizeFaces()
 }
 
@@ -29,8 +27,8 @@ async function recognizeFaces() {
 
     video.addEventListener('play', async () => {
         console.log('Playing')
-        const canvas = faceapi.createCanvasFromMedia(video)
-        document.body.append(canvas)
+        const canvas = faceapi.createCanvasFromMedia(video) //create canvas from video
+        document.body.append(canvas) //append canvas to body
 
         const displaySize = { width: video.width, height: video.height }
         faceapi.matchDimensions(canvas, displaySize)
@@ -61,9 +59,8 @@ async function recognizeFaces() {
 
 
 function loadLabeledImages() {
-    //const labels = ['Black Widow', 'Captain America', 'Hawkeye' , 'Jim Rhodes', 'Tony Stark', 'Thor', 'Captain Marvel']
-    const labels = ['Prashant Kumar'] // for WebCam
-    return Promise.all(
+    const labels = ['Richard Saavedra'] // for WebCam
+return Promise.all(
         labels.map(async (label)=>{
             const descriptions = []
             for(let i=1; i<=2; i++) {
@@ -72,7 +69,7 @@ function loadLabeledImages() {
                 console.log(label + i + JSON.stringify(detections))
                 descriptions.push(detections.descriptor)
             }
-            document.body.append(label+' Faces Loaded | ')
+            document.body.append(' ' + label+' Faces Loaded | ')
             return new faceapi.LabeledFaceDescriptors(label, descriptions)
         })
     )
